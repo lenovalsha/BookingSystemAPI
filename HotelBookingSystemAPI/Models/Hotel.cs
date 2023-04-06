@@ -15,6 +15,8 @@
         public List<Booking>? Bookings { get; set; }
         public List<HotelImage>? HotelImages { get; set; }
         public List<Staff>? Staffs { get; set; }
+        public List<Position>? Positions { get; set; }
+
 
 
 
@@ -24,6 +26,7 @@
             Bookings = new List<Booking>();
             HotelImages = new List<HotelImage>();
             Staffs = new List<Staff>();
+            Positions = new List<Position>();
         }
 
     }

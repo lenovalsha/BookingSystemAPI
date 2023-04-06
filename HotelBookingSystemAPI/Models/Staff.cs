@@ -10,8 +10,11 @@
         public string City { get; set; }
         public string Postal { get; set; }
         public string Phone { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
         public int? PositionId { get; set; }
         public Position? Position { get; set; }
-      
+        public int? HotelId { get; set; }
+        public Hotel Hotel { get; set; }
     }
 }

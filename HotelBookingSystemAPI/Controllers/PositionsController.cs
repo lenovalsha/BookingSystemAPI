@@ -50,6 +50,24 @@ namespace HotelBookingSystemAPI.Controllers
             return position;
         }
 
+        // GET: api/Positions/hotelId/1
+        [HttpGet("hotelId/{hotelId}")]
+        public async Task<ActionResult<IEnumerable<Position>>> GetPositionsByhotel(int hotelId)
+        {
+            if (_context.Positions == null)
+            {
+                return NotFound();
+            }
+            var positions = await _context.Positions.Where(p=>p.HotelId == hotelId).ToListAsync();
+
+            if (positions == null)
+            {
+                return NotFound();
+            }
+
+            return positions;
+        }
+
         // PUT: api/Positions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

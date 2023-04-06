@@ -4,6 +4,7 @@ using HotelBookingSystemAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystemAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230406185123_init14")]
+    partial class init14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,16 +271,11 @@ namespace HotelBookingSystemAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("HotelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
 
                     b.ToTable("Positions");
                 });
@@ -553,15 +551,6 @@ namespace HotelBookingSystemAPI.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("HotelBookingSystemAPI.Models.Position", b =>
-                {
-                    b.HasOne("HotelBookingSystemAPI.Models.Hotel", "Hotel")
-                        .WithMany("Positions")
-                        .HasForeignKey("HotelId");
-
-                    b.Navigation("Hotel");
-                });
-
             modelBuilder.Entity("HotelBookingSystemAPI.Models.Reservation", b =>
                 {
                     b.HasOne("HotelBookingSystemAPI.Models.Booking", "Booking")
@@ -653,8 +642,6 @@ namespace HotelBookingSystemAPI.Migrations
                     b.Navigation("Bookings");
 
                     b.Navigation("HotelImages");
-
-                    b.Navigation("Positions");
 
                     b.Navigation("Rooms");
 
