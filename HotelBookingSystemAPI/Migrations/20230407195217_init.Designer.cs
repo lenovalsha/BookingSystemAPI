@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystemAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230404155053_init8")]
-    partial class init8
+    [Migration("20230407195217_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,6 +154,10 @@ namespace HotelBookingSystemAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -184,8 +188,8 @@ namespace HotelBookingSystemAPI.Migrations
                     b.Property<int?>("HotelId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Image")
-                        .HasColumnType("tinyint");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
@@ -271,11 +275,16 @@ namespace HotelBookingSystemAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("HotelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HotelId");
 
                     b.ToTable("Positions");
                 });
@@ -314,7 +323,7 @@ namespace HotelBookingSystemAPI.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomsBooked");
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("HotelBookingSystemAPI.Models.ReservationStatus", b =>
@@ -383,8 +392,8 @@ namespace HotelBookingSystemAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte>("Image")
-                        .HasColumnType("tinyint");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int?>("RoomId")
                         .HasColumnType("int");
@@ -420,10 +429,6 @@ namespace HotelBookingSystemAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -465,6 +470,10 @@ namespace HotelBookingSystemAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -473,6 +482,10 @@ namespace HotelBookingSystemAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Postal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -547,6 +560,15 @@ namespace HotelBookingSystemAPI.Migrations
                     b.Navigation("Room");
                 });
 
+            modelBuilder.Entity("HotelBookingSystemAPI.Models.Position", b =>
+                {
+                    b.HasOne("HotelBookingSystemAPI.Models.Hotel", "Hotel")
+                        .WithMany("Positions")
+                        .HasForeignKey("HotelId");
+
+                    b.Navigation("Hotel");
+                });
+
             modelBuilder.Entity("HotelBookingSystemAPI.Models.Reservation", b =>
                 {
                     b.HasOne("HotelBookingSystemAPI.Models.Booking", "Booking")
@@ -578,13 +600,15 @@ namespace HotelBookingSystemAPI.Migrations
                         .WithMany("Rooms")
                         .HasForeignKey("RoomStatusId");
 
-                    b.HasOne("HotelBookingSystemAPI.Models.RoomType", null)
+                    b.HasOne("HotelBookingSystemAPI.Models.RoomType", "RoomType")
                         .WithMany("Rooms")
                         .HasForeignKey("RoomTypeId");
 
                     b.Navigation("Hotel");
 
                     b.Navigation("RoomStatus");
+
+                    b.Navigation("RoomType");
                 });
 
             modelBuilder.Entity("HotelBookingSystemAPI.Models.RoomImage", b =>
@@ -598,13 +622,15 @@ namespace HotelBookingSystemAPI.Migrations
 
             modelBuilder.Entity("HotelBookingSystemAPI.Models.Staff", b =>
                 {
-                    b.HasOne("HotelBookingSystemAPI.Models.Hotel", null)
+                    b.HasOne("HotelBookingSystemAPI.Models.Hotel", "Hotel")
                         .WithMany("Staffs")
                         .HasForeignKey("HotelId");
 
                     b.HasOne("HotelBookingSystemAPI.Models.Position", "Position")
                         .WithMany("Staffs")
                         .HasForeignKey("PositionId");
+
+                    b.Navigation("Hotel");
 
                     b.Navigation("Position");
                 });
@@ -634,6 +660,8 @@ namespace HotelBookingSystemAPI.Migrations
                     b.Navigation("Bookings");
 
                     b.Navigation("HotelImages");
+
+                    b.Navigation("Positions");
 
                     b.Navigation("Rooms");
 

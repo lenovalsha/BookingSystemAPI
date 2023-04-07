@@ -10,6 +10,7 @@
         public string Address { get; set; }
         public string City { get; set; }
         public string Postal { get; set; }
+        public byte[] Image { get; set; }
         public string Phone { get; set; }
         public List<Room>? Rooms { get; set; }
         public List<Booking>? Bookings { get; set; }

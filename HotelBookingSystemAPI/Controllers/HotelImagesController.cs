@@ -49,7 +49,23 @@ namespace HotelBookingSystemAPI.Controllers
 
             return hotelImage;
         }
+        // GET: api/HotelImages/HotelId/5
+        [HttpGet("hotelId/{hotelid}")]
+        public async Task<ActionResult<byte[]>> GetHotelImagebyHotel(int hotelid)
+        {
+            if (_context.HotelImages == null)
+            {
+                return NotFound();
+            }
+            var hotelImage = await _context.HotelImages.Where(i => i.HotelId == hotelid).Select(i => i.Image).FirstOrDefaultAsync();
 
+            if (hotelImage == null)
+            {
+                return NotFound();
+            }
+
+            return hotelImage;
+        }
         // PUT: api/HotelImages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
