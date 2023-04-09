@@ -20,7 +20,6 @@ namespace HotelBookingSystemAPI.Controllers
         {
             _context = context;
         }
-
         // GET: api/ReservationStatus
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReservationStatus>>> GetReservationStatuses()

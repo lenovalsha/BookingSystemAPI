@@ -16,7 +16,6 @@
         public List<Reservation>? Reservations { get; set; }
         public List<HotelImage>? HotelImages { get; set; }
         public List<Staff>? Staffs { get; set; }
-        public List<Position>? Positions { get; set; }
         public List<RoomImage>? RoomImages { get; set; }
 
 
@@ -29,7 +28,6 @@
             Reservations = new List<Reservation>();
             HotelImages = new List<HotelImage>();
             Staffs = new List<Staff>();
-            Positions = new List<Position>();
             RoomImages = new List<RoomImage>();
         }
 
