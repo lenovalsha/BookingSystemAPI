@@ -34,7 +34,7 @@ namespace HotelBookingSystemAPI.Controllers
 
         // GET: api/Guests/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Guest>> GetGuest(int id)
+        public async Task<ActionResult<Guest>> GetGuest(string id)
         {
           if (_context.Guests == null)
           {
@@ -53,9 +53,9 @@ namespace HotelBookingSystemAPI.Controllers
         // PUT: api/Guests/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGuest(int id, Guest guest)
+        public async Task<IActionResult> PutGuest(string id, Guest guest)
         {
-            if (id != guest.Id)
+            if (id != guest.Email)
             {
                 return BadRequest();
             }
@@ -91,14 +91,28 @@ namespace HotelBookingSystemAPI.Controllers
               return Problem("Entity set 'DataContext.Guests'  is null.");
           }
             _context.Guests.Add(guest);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (GuestExists(guest.Email))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-            return CreatedAtAction("GetGuest", new { id = guest.Id }, guest);
+            return CreatedAtAction("GetGuest", new { id = guest.Email }, guest);
         }
 
         // DELETE: api/Guests/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGuest(int id)
+        public async Task<IActionResult> DeleteGuest(string id)
         {
             if (_context.Guests == null)
             {
@@ -116,9 +130,9 @@ namespace HotelBookingSystemAPI.Controllers
             return NoContent();
         }
 
-        private bool GuestExists(int id)
+        private bool GuestExists(string id)
         {
-            return (_context.Guests?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Guests?.Any(e => e.Email == id)).GetValueOrDefault();
         }
     }
 }

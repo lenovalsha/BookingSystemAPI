@@ -13,10 +13,12 @@
         public byte[] Image { get; set; }
         public string Phone { get; set; }
         public List<Room>? Rooms { get; set; }
-        public List<Booking>? Bookings { get; set; }
+        public List<Reservation>? Reservations { get; set; }
         public List<HotelImage>? HotelImages { get; set; }
         public List<Staff>? Staffs { get; set; }
         public List<Position>? Positions { get; set; }
+        public List<RoomImage>? RoomImages { get; set; }
+
 
 
 
@@ -24,10 +26,11 @@
         public Hotel()
         {
             Rooms = new List<Room>();
-            Bookings = new List<Booking>();
+            Reservations = new List<Reservation>();
             HotelImages = new List<HotelImage>();
             Staffs = new List<Staff>();
             Positions = new List<Position>();
+            RoomImages = new List<RoomImage>();
         }
 
     }

@@ -1,8 +1,10 @@
-﻿namespace HotelBookingSystemAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HotelBookingSystemAPI.Models
 {
     public class RoomType
     {
-        public int Id { get; set; }
+        [Key]
         public string Name { get; set; }
         public List<Room>? Rooms { get; set; }
         public RoomType()

@@ -5,13 +5,17 @@ namespace HotelBookingSystemAPI.Models
     public class Reservation
     {
         public int Id { get; set; }
-        public int? RoomId { get; set; }
+        public string GuestEmail { get; set; }
+        public Guest? Guest { get; set; }
+        public int RoomNumber { get; set; }
         public Room? Room { get; set; }
-        public int? BookingId { get; set; }
-        public Booking? Booking { get; set; }
+        public int HotelId { get; set; }
+        public Hotel? Hotel { get; set; }
+        public DateTime ArrivalDate { get; set; }
+        public DateTime DepartureDate { get; set; }
         public double Rate { get; set; }
-        public int Chidren { get; set; }
-        public int Adults { get; set; }
+        public int Children { get; set; } = 2;
+        public int Adults { get; set; } = 2;
         public int? ReservationStatusId { get; set; }
         public ReservationStatus? ReservationStatus { get; set; }
 

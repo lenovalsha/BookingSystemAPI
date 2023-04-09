@@ -4,6 +4,7 @@ using HotelBookingSystemAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystemAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230409013807_init2")]
+    partial class init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,14 +41,21 @@ namespace HotelBookingSystemAPI.Migrations
 
             modelBuilder.Entity("HotelBookingSystemAPI.Models.Guest", b =>
                 {
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -57,10 +67,6 @@ namespace HotelBookingSystemAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -69,7 +75,7 @@ namespace HotelBookingSystemAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Email");
+                    b.HasKey("Id");
 
                     b.ToTable("Guests");
                 });
@@ -252,15 +258,14 @@ namespace HotelBookingSystemAPI.Migrations
                     b.Property<DateTime>("ArrivalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Children")
+                    b.Property<int>("Chidren")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DepartureDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("GuestEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("GuestId")
+                        .HasColumnType("int");
 
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
@@ -282,7 +287,7 @@ namespace HotelBookingSystemAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GuestEmail");
+                    b.HasIndex("GuestId");
 
                     b.HasIndex("HotelId");
 
@@ -513,7 +518,7 @@ namespace HotelBookingSystemAPI.Migrations
                 {
                     b.HasOne("HotelBookingSystemAPI.Models.Guest", "Guest")
                         .WithMany("Reservations")
-                        .HasForeignKey("GuestEmail")
+                        .HasForeignKey("GuestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -528,7 +533,7 @@ namespace HotelBookingSystemAPI.Migrations
                         .HasForeignKey("ReservationStatusId");
 
                     b.HasOne("HotelBookingSystemAPI.Models.Room", "Room")
-                        .WithMany("Reservations")
+                        .WithMany("RoomsBooked")
                         .HasForeignKey("RoomHotelId", "RoomNumber1");
 
                     b.Navigation("Guest");
@@ -644,7 +649,7 @@ namespace HotelBookingSystemAPI.Migrations
                 {
                     b.Navigation("Payments");
 
-                    b.Navigation("Reservations");
+                    b.Navigation("RoomsBooked");
                 });
 
             modelBuilder.Entity("HotelBookingSystemAPI.Models.RoomStatus", b =>

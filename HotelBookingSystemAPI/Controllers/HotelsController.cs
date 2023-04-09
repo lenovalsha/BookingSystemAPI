@@ -49,7 +49,22 @@ namespace HotelBookingSystemAPI.Controllers
 
             return hotel;
         }
-      
+        // GET: api/Hotels?adminusername=a
+        [HttpGet("adminusername/{name}")]
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotelByAdmin(string name)
+        {
+            if (_context.Hotels == null)
+            {
+                return NotFound();
+            }
+            var hotel = await _context.Hotels.Where(t => t.AdminUsername == name).ToListAsync();
+            if (hotel.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return hotel;
+        }
         // PUT: api/Hotels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

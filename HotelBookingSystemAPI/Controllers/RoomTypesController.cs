@@ -34,7 +34,7 @@ namespace HotelBookingSystemAPI.Controllers
 
         // GET: api/RoomTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RoomType>> GetRoomType(int id)
+        public async Task<ActionResult<RoomType>> GetRoomType(string id)
         {
           if (_context.RoomTypes == null)
           {
@@ -53,9 +53,9 @@ namespace HotelBookingSystemAPI.Controllers
         // PUT: api/RoomTypes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoomType(int id, RoomType roomType)
+        public async Task<IActionResult> PutRoomType(string id, RoomType roomType)
         {
-            if (id != roomType.Id)
+            if (id != roomType.Name)
             {
                 return BadRequest();
             }
@@ -91,14 +91,28 @@ namespace HotelBookingSystemAPI.Controllers
               return Problem("Entity set 'DataContext.RoomTypes'  is null.");
           }
             _context.RoomTypes.Add(roomType);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (RoomTypeExists(roomType.Name))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-            return CreatedAtAction("GetRoomType", new { id = roomType.Id }, roomType);
+            return CreatedAtAction("GetRoomType", new { id = roomType.Name }, roomType);
         }
 
         // DELETE: api/RoomTypes/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRoomType(int id)
+        public async Task<IActionResult> DeleteRoomType(string id)
         {
             if (_context.RoomTypes == null)
             {
@@ -116,9 +130,9 @@ namespace HotelBookingSystemAPI.Controllers
             return NoContent();
         }
 
-        private bool RoomTypeExists(int id)
+        private bool RoomTypeExists(string id)
         {
-            return (_context.RoomTypes?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.RoomTypes?.Any(e => e.Name == id)).GetValueOrDefault();
         }
     }
 }

@@ -49,6 +49,40 @@ namespace HotelBookingSystemAPI.Controllers
 
             return roomImage;
         }
+        // GET: api/RoomImages/hotelId/5/RoomId/5
+
+        //[HttpGet("hotelId/{hotelid}/roomId/{roomid}")]
+        //public async Task<ActionResult<IEnumerable<RoomImage>>> GetRoomImages(int hotelid, int roomid)
+        //{
+        //    if (_context.RoomImages == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var roomImage = await _context.RoomImages.Where(i => i.HotelId == hotelid && i.RoomNumber==roomid).ToListAsync();
+        //    if (roomImage == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return roomImage;
+        //}
+        // GET: api/RoomImages/hotelId/5
+
+        [HttpGet("hotelId/{hotelid}")]
+        public async Task<ActionResult<IEnumerable<RoomImage>>> GetHotelRoomImages(int hotelid)
+        {
+            if (_context.RoomImages == null)
+            {
+                return NotFound();
+            }
+            var roomImage = await _context.RoomImages.Where(i => i.HotelId == hotelid).ToListAsync();
+            if (roomImage == null)
+            {
+                return NotFound();
+            }
+
+            return roomImage;
+        }
 
         // PUT: api/RoomImages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
