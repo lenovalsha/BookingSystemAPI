@@ -31,7 +31,16 @@ namespace HotelBookingSystemAPI.Controllers
           }
             return await _context.Staffs.ToListAsync();
         }
-
+        // GET: api/Staffs/HotelId/2
+        [HttpGet("hotelId/{hotelId}")]
+        public async Task<ActionResult<IEnumerable<Staff>>> GetHotelStaffs(int hotelId)
+        {
+            if (_context.Staffs == null)
+            {
+                return NotFound();
+            }
+            return await _context.Staffs.Where(s=>s.HotelId == hotelId).ToListAsync();
+        }
         // GET: api/Staffs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Staff>> GetStaff(int id)
@@ -41,7 +50,6 @@ namespace HotelBookingSystemAPI.Controllers
               return NotFound();
           }
             var staff = await _context.Staffs.FindAsync(id);
-
             if (staff == null)
             {
                 return NotFound();

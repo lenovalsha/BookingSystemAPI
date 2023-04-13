@@ -49,6 +49,23 @@ namespace HotelBookingSystemAPI.Controllers
 
             return reservation;
         }
+        // GET: api/Reservations/email/thisemail
+        [HttpGet("guestemail/{email}")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservationByEmail(string email)
+        {
+            if (_context.Reservations == null)
+            {
+                return NotFound();
+            }
+            var reservation = await _context.Reservations.Where(e=> e.GuestEmail == email).ToListAsync();
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            return reservation;
+        }
 
         // PUT: api/Reservations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

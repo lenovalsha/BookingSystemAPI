@@ -62,8 +62,58 @@ namespace HotelBookingSystemAPI.Controllers
             {
                 return NotFound();
             }
+            return hotel;
+        }
+        // GET: api/Hotels/province/ab
+        [HttpGet("province/{prov}")]
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotelByProvince(string prov)
+        {
+            if (_context.Hotels == null)
+            {
+                return NotFound();
+            }
+            var hotel = await _context.Hotels.Where(t => t.Province == prov).ToListAsync();
+            if (hotel.Count == 0)
+            {
+                return NotFound();
+            }
 
             return hotel;
+        }
+        // GET: api/Hotels/province/ab
+        [HttpGet("arrivaldate/{checkinDate}/departuredate/{checkoutdate}/province/{prov}")]
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotelByProvince(string prov,DateTime checkoutDate,DateTime checkinDate)
+        {
+            if (_context.Hotels == null)
+            {
+                return NotFound();
+            }
+
+            //get the rooms that have available in the date
+            var overlappingReservations = await _context.Reservations.Where(r => r.ArrivalDate < checkoutDate && r.DepartureDate > checkinDate).ToListAsync();
+            var bookedRoomNumbers = overlappingReservations.Select(r => r.RoomNumber).ToList();
+            var availableRooms = await _context.Rooms.Where(r => !bookedRoomNumbers.Contains(r.RoomNumber)).ToListAsync();
+
+            var filter = await _context.Hotels.Include(a=>a.Reservations).ToListAsync();
+            var hotels = new List<Hotel>();
+            var rooms = new List<Room>();
+            foreach (Hotel h in filter)
+            {
+                if(h.Province == prov)
+                {
+                foreach (Room room in availableRooms)
+                {
+                    if(room.HotelId == h.Id)
+                    {
+                        hotels.Add(h);
+                    }
+                }
+
+                }
+               
+            }
+            return hotels;
+
         }
         // PUT: api/Hotels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
