@@ -34,13 +34,13 @@ namespace HotelBookingSystemAPI.Controllers
 
         // GET: api/Reservations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Reservation>> GetReservation(int id)
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservation(int id)
         {
           if (_context.Reservations == null)
           {
               return NotFound();
           }
-            var reservation = await _context.Reservations.FindAsync(id);
+            var reservation = await _context.Reservations.Where(r=>r.Id == id).Include(r=>r.Guest).ToListAsync();
 
             if (reservation == null)
             {
@@ -66,7 +66,25 @@ namespace HotelBookingSystemAPI.Controllers
 
             return reservation;
         }
+        //get reservations on specific hotel for specific date
+        [HttpGet("hotelId/{hotelId}/date/{date}")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservedRooms(int hotelId, DateTime date)
+        {
+            if (_context.Rooms == null)
+            {
+                return NotFound();
+            }
 
+            var overlappingReservations = await _context.Reservations.Include(r=>r.Guest)
+                .Where(r => r.ArrivalDate <= date && r.DepartureDate >= date && r.HotelId == hotelId)
+                .ToListAsync();
+            if (overlappingReservations == null)
+            {
+                return NotFound();
+            }
+
+            return overlappingReservations;
+        }
         // PUT: api/Reservations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

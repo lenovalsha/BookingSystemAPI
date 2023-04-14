@@ -25,11 +25,22 @@ namespace HotelBookingSystemAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels()
         {
-          if (_context.Hotels == null)
+            if (_context.Hotels == null)
           {
               return NotFound();
           }
-            return await _context.Hotels.ToListAsync();
+            var hotels = await _context.Hotels.Include(h=> h.Rooms).ToListAsync();
+            if(hotels == null)
+            {
+                return NotFound();
+            }
+          //var hotelPrices = await _context.Rooms.GroupBy(r=>r.HotelId).Select(g=> new
+          //{
+          //    HotelId = g.Key,
+          //    MinPrice = g.Min(r=>r.BaseRate),
+          //    MaxPrice = g.Max(r=>r.BaseRate)
+          //}).ToListAsync();
+            return hotels;
         }
 
         // GET: api/Hotels/5
@@ -80,9 +91,10 @@ namespace HotelBookingSystemAPI.Controllers
 
             return hotel;
         }
+        
         // GET: api/Hotels/province/ab
         [HttpGet("arrivaldate/{checkinDate}/departuredate/{checkoutdate}/province/{prov}")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotelByProvince(string prov,DateTime checkoutDate,DateTime checkinDate)
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotelMinPrice(string prov, DateTime checkoutDate, DateTime checkinDate)
         {
             if (_context.Hotels == null)
             {
@@ -94,28 +106,28 @@ namespace HotelBookingSystemAPI.Controllers
             var bookedRoomNumbers = overlappingReservations.Select(r => r.RoomNumber).ToList();
             var availableRooms = await _context.Rooms.Where(r => !bookedRoomNumbers.Contains(r.RoomNumber)).ToListAsync();
 
-            var filter = await _context.Hotels.Include(a=>a.Reservations).ToListAsync();
+            var filter = await _context.Hotels.Include(a => a.Reservations).Include(a => a.Rooms).ToListAsync();
             var hotels = new List<Hotel>();
             var rooms = new List<Room>();
             foreach (Hotel h in filter)
             {
-                if(h.Province == prov)
+                if (h.Province == prov)
                 {
-                foreach (Room room in availableRooms)
-                {
-                    if(room.HotelId == h.Id)
+                    foreach (Room room in availableRooms)
                     {
-                        hotels.Add(h);
+                        if (room.HotelId == h.Id)
+                        {
+                            hotels.Add(h);
+                        }
                     }
-                }
 
                 }
-               
+
             }
             return hotels;
 
         }
-        // PUT: api/Hotels/5
+       
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)

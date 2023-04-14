@@ -57,6 +57,20 @@ namespace HotelBookingSystemAPI.Controllers
 
             return staff;
         }
+        [HttpGet("username/{username}")]
+        public async Task<ActionResult<Staff>> GetStaff(string username)
+        {
+            if (_context.Staffs == null)
+            {
+                return NotFound();
+            }
+            var staff = await _context.Staffs.Where(s => s.Username == username).FirstOrDefaultAsync();
+            if (staff == null)
+            {
+                return NotFound();
+            }
+            return staff;
+        }
 
         // PUT: api/Staffs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

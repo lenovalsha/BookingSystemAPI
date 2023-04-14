@@ -4,6 +4,7 @@ using HotelBookingSystemAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystemAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230414193609_init7")]
+    partial class init7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,6 +256,7 @@ namespace HotelBookingSystemAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GuestEmail")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("HotelId")
@@ -504,7 +508,9 @@ namespace HotelBookingSystemAPI.Migrations
                 {
                     b.HasOne("HotelBookingSystemAPI.Models.Guest", "Guest")
                         .WithMany("Reservations")
-                        .HasForeignKey("GuestEmail");
+                        .HasForeignKey("GuestEmail")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HotelBookingSystemAPI.Models.Hotel", "Hotel")
                         .WithMany("Reservations")

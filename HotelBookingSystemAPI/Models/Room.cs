@@ -9,10 +9,10 @@ namespace HotelBookingSystemAPI.Models
     {
         [Key]
         public int? HotelId { get; set; }
-        public Hotel? Hotel { get; set; }
-        public int Floor { get; set; }
         [Key]
         public int RoomNumber { get; set; }
+        public Hotel? Hotel { get; set; }
+        public int Floor { get; set; }
         public string Description { get; set; }
         public double BaseRate { get; set; }
         public int? RoomStatusId { get; set; }
@@ -35,7 +35,6 @@ namespace HotelBookingSystemAPI.Models
             builder.HasKey(r => new { r.HotelId, r.RoomNumber });
 
             // Other configuration options go here
-
             builder.HasOne(r => r.Hotel)
                    .WithMany(h => h.Rooms)
                    .HasForeignKey(r => r.HotelId)

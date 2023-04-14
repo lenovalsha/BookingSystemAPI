@@ -1,11 +1,19 @@
-﻿using System.Security.Principal;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 
 namespace HotelBookingSystemAPI.Models
 {
     public class Reservation
     {
         public int Id { get; set; }
-        public string GuestEmail { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? Postal { get; set; }
+        public string? Phone{ get; set; }
+        public string? Email { get; set; }
+        public string? GuestEmail { get; set; }
         public Guest? Guest { get; set; }
         public int RoomNumber { get; set; }
         public Room? Room { get; set; }
@@ -18,7 +26,6 @@ namespace HotelBookingSystemAPI.Models
         public int Adults { get; set; } = 2;
         public int? ReservationStatusId { get; set; }
         public ReservationStatus? ReservationStatus { get; set; }
-
 
     }
 }

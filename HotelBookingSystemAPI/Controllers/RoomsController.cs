@@ -82,7 +82,35 @@ namespace HotelBookingSystemAPI.Controllers
             }
             return availableRooms;
         }
+        //// GET: api/Rooms/HotelId/51
+        //[HttpGet("hotelId/{hotelId}/arrivaldate/{aDate}/departuredate/{dDate}")]
+        //public async Task<ActionResult<IEnumerable<Room>>> GetReservedRooms(DateTime dDate, DateTime aDate, int hotelId)
+        //{
+        //    if (_context.Rooms == null)
+        //    {
+        //        return NotFound();
+        //    }
 
+        //    // Get the reservations that overlap with the specified check-in and check-out dates
+        //    var overlappingReservations = await _context.Reservations.Where(r => r.ArrivalDate < dDate && r.DepartureDate > aDate && r.HotelId == hotelId).ToListAsync();
+
+        //    // Filter the reservations based on the current date
+        //    var currentDate = DateTime.Now.Date;
+        //    overlappingReservations = overlappingReservations.Where(r => r.ArrivalDate.Date <= currentDate && r.DepartureDate.Date >= currentDate).ToList();
+
+        //    var bookedRoomNumbers = overlappingReservations.Select(r => r.RoomNumber).ToList();
+
+        //    // Get the list of reserved rooms for today
+        //    var reservedRooms = await _context.Rooms.Where(r => r.HotelId == hotelId && bookedRoomNumbers.Contains(r.RoomNumber)).ToListAsync();
+
+        //    if (reservedRooms == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return reservedRooms;
+        //}
+        
         // PUT: api/Rooms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
